@@ -12,12 +12,12 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConfig }) => {
   const [levelConfig, setLevelConfig] = useState<LevelConfig>({
-    level1Labels: ['对照组', '实验组'],
-    level2Labels: ['第一天', '第二天'],
-    level3Labels: ['类型 A', '类型 B'],
-    level3Colors: ['#3b82f6', '#10b981'],
-    level3OutlineColors: ['#1d4ed8', '#047857'],
-    level3OutlineWidths: [0, 0]
+    level1Labels: [''],
+    level2Labels: [''],
+    level3Labels: [''],
+    level3Colors: ['#3b82f6'],
+    level3OutlineColors: ['#1d4ed8'],
+    level3OutlineWidths: [0]
   });
 
   // Memoized grid generation to avoid infinite loops
@@ -36,8 +36,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
             level1: l1,
             level2: l2,
             level3: l3,
-            mean: existing?.mean ?? 10,
-            sd: existing?.sd ?? 2,
+            mean: existing?.mean ?? '',
+            sd: existing?.sd ?? '',
             color: levelConfig.level3Colors[idx] || defaultColors[idx % defaultColors.length],
             outlineColor: levelConfig.level3OutlineColors[idx] || '#000000',
             outlineWidth: levelConfig.level3OutlineWidths[idx] || 0
@@ -76,7 +76,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
 
   const addLevelLabel = (level: 1 | 2 | 3) => {
     const key = `level${level}Labels` as keyof LevelConfig;
-    const newLabels = [...levelConfig[key], `新标签 ${levelConfig[key].length + 1}`];
+    const newLabels = [...levelConfig[key], ''];
     const updates: Partial<LevelConfig> = { [key]: newLabels };
     
     if (level === 3) {
@@ -366,7 +366,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
                     <input
                       type="number"
                       value={point.mean}
-                      onChange={(e) => updateDataPoint(point.id, { mean: parseFloat(e.target.value) || 0 })}
+                      onChange={(e) => updateDataPoint(point.id, { mean: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                       className="w-full text-xs p-1.5 bg-white border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
                     />
                   </div>
@@ -375,7 +375,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
                     <input
                       type="number"
                       value={point.sd}
-                      onChange={(e) => updateDataPoint(point.id, { sd: parseFloat(e.target.value) || 0 })}
+                      onChange={(e) => updateDataPoint(point.id, { sd: e.target.value === '' ? '' : parseFloat(e.target.value) })}
                       className="w-full text-xs p-1.5 bg-white border border-gray-200 rounded focus:ring-1 focus:ring-blue-500 outline-none"
                     />
                   </div>

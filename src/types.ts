@@ -3,8 +3,8 @@ export interface DataPoint {
   level1: string; // Group
   level2: string; // Subgroup
   level3: string; // Category
-  mean: number;
-  sd: number;
+  mean: number | '';
+  sd: number | '';
   color: string;
   outlineColor?: string;
   outlineWidth?: number;

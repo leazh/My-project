@@ -12,20 +12,13 @@ import { Menu, X, BarChart3 } from 'lucide-react';
 import { cn } from './lib/utils';
 
 const INITIAL_DATA: DataPoint[] = [
-  { id: '1', level1: '对照组', level2: '第一天', level3: '类型 A', mean: 12.5, sd: 1.2, color: '#3b82f6', outlineColor: '#1d4ed8', outlineWidth: 0 },
-  { id: '2', level1: '对照组', level2: '第一天', level3: '类型 B', mean: 15.2, sd: 1.8, color: '#10b981', outlineColor: '#047857', outlineWidth: 0 },
-  { id: '3', level1: '对照组', level2: '第二天', level3: '类型 A', mean: 14.1, sd: 1.5, color: '#3b82f6', outlineColor: '#1d4ed8', outlineWidth: 0 },
-  { id: '4', level1: '对照组', level2: '第二天', level3: '类型 B', mean: 18.4, sd: 2.1, color: '#10b981', outlineColor: '#047857', outlineWidth: 0 },
-  { id: '5', level1: '实验组', level2: '第一天', level3: '类型 A', mean: 18.2, sd: 2.4, color: '#3b82f6', outlineColor: '#1d4ed8', outlineWidth: 0 },
-  { id: '6', level1: '实验组', level2: '第一天', level3: '类型 B', mean: 22.1, sd: 3.1, color: '#10b981', outlineColor: '#047857', outlineWidth: 0 },
-  { id: '7', level1: '实验组', level2: '第二天', level3: '类型 A', mean: 25.4, sd: 2.8, color: '#3b82f6', outlineColor: '#1d4ed8', outlineWidth: 0 },
-  { id: '8', level1: '实验组', level2: '第二天', level3: '类型 B', mean: 31.2, sd: 4.2, color: '#10b981', outlineColor: '#047857', outlineWidth: 0 },
+  { id: '1', level1: '', level2: '', level3: '', mean: '', sd: '', color: '#3b82f6', outlineColor: '#1d4ed8', outlineWidth: 0 },
 ];
 
 const INITIAL_CONFIG: ChartConfig = {
-  title: '实验结果分析图表',
-  xAxisTitle: '分组与时间点',
-  yAxisTitle: '测量值 (单位)',
+  title: '',
+  xAxisTitle: '',
+  yAxisTitle: '',
   showDataLabels: true,
   showErrorBars: true,
   showGrid: true,

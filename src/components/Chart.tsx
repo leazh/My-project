@@ -49,7 +49,7 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
       .paddingInner(0.05)
       .paddingOuter(0.05);
 
-    const dataMax = d3.max(data, (d: DataPoint) => d.mean + d.sd) || 10;
+    const dataMax = d3.max(data, (d: DataPoint) => (typeof d.mean === 'number' ? d.mean : 0) + (typeof d.sd === 'number' ? d.sd : 0)) || 10;
     const yMax = config.yAxisMax && config.yAxisMax > 0 ? config.yAxisMax : dataMax * 1.1;
     
     const y = d3.scaleLinear()
@@ -147,9 +147,9 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
 
     bars.append('rect')
       .attr('x', 0)
-      .attr('y', (d: DataPoint) => y(d.mean))
+      .attr('y', (d: DataPoint) => y(typeof d.mean === 'number' ? d.mean : 0))
       .attr('width', x2.bandwidth())
-      .attr('height', (d: DataPoint) => height - y(d.mean))
+      .attr('height', (d: DataPoint) => height - y(typeof d.mean === 'number' ? d.mean : 0))
       .attr('fill', (d: DataPoint) => d.color)
       .attr('stroke', (d: DataPoint) => d.outlineColor || 'none')
       .attr('stroke-width', (d: DataPoint) => d.outlineWidth || 0);
@@ -159,24 +159,24 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
       bars.append('line')
         .attr('x1', x2.bandwidth() / 2)
         .attr('x2', x2.bandwidth() / 2)
-        .attr('y1', (d: DataPoint) => y(d.mean - d.sd))
-        .attr('y2', (d: DataPoint) => y(d.mean + d.sd))
+        .attr('y1', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) - (typeof d.sd === 'number' ? d.sd : 0)))
+        .attr('y2', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) + (typeof d.sd === 'number' ? d.sd : 0)))
         .attr('stroke', '#333')
         .attr('stroke-width', 1.5);
 
       bars.append('line')
         .attr('x1', x2.bandwidth() / 4)
         .attr('x2', x2.bandwidth() * 0.75)
-        .attr('y1', (d: DataPoint) => y(d.mean + d.sd))
-        .attr('y2', (d: DataPoint) => y(d.mean + d.sd))
+        .attr('y1', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) + (typeof d.sd === 'number' ? d.sd : 0)))
+        .attr('y2', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) + (typeof d.sd === 'number' ? d.sd : 0)))
         .attr('stroke', '#333')
         .attr('stroke-width', 1.5);
 
       bars.append('line')
         .attr('x1', x2.bandwidth() / 4)
         .attr('x2', x2.bandwidth() * 0.75)
-        .attr('y1', (d: DataPoint) => y(d.mean - d.sd))
-        .attr('y2', (d: DataPoint) => y(d.mean - d.sd))
+        .attr('y1', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) - (typeof d.sd === 'number' ? d.sd : 0)))
+        .attr('y2', (d: DataPoint) => y((typeof d.mean === 'number' ? d.mean : 0) - (typeof d.sd === 'number' ? d.sd : 0)))
         .attr('stroke', '#333')
         .attr('stroke-width', 1.5);
     }
@@ -185,11 +185,15 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
     if (config.showDataLabels) {
       bars.append('text')
         .attr('x', x2.bandwidth() / 2)
-        .attr('y', (d: DataPoint) => config.showErrorBars ? y(d.mean + d.sd) - 10 : y(d.mean) - 5)
+        .attr('y', (d: DataPoint) => {
+          const mean = typeof d.mean === 'number' ? d.mean : 0;
+          const sd = typeof d.sd === 'number' ? d.sd : 0;
+          return config.showErrorBars ? y(mean + sd) - 10 : y(mean) - 5;
+        })
         .attr('text-anchor', 'middle')
         .style('font-size', '10px')
         .style('font-weight', '500')
-        .text((d: DataPoint) => d.mean.toFixed(2));
+        .text((d: DataPoint) => typeof d.mean === 'number' ? d.mean.toFixed(2) : '');
     }
 
     // Titles
