@@ -180,6 +180,29 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
               </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase">纵轴最大值 (留空自动)</label>
+                <input
+                  type="number"
+                  placeholder="自动"
+                  value={config.yAxisMax || ''}
+                  onChange={(e) => setConfig({ ...config, yAxisMax: e.target.value ? parseFloat(e.target.value) : undefined })}
+                  className="w-full text-sm p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-500 uppercase">纵轴刻度间距 (留空自动)</label>
+                <input
+                  type="number"
+                  placeholder="自动"
+                  value={config.yAxisStep || ''}
+                  onChange={(e) => setConfig({ ...config, yAxisStep: e.target.value ? parseFloat(e.target.value) : undefined })}
+                  className="w-full text-sm p-2 bg-gray-50 border border-gray-200 rounded-lg focus:ring-1 focus:ring-blue-500 outline-none"
+                />
+              </div>
+            </div>
+
             <div className="flex items-center justify-between p-3 bg-gray-50 rounded-xl border border-gray-100">
               <span className="text-xs font-bold text-gray-600 uppercase">显示网格线</span>
               <button

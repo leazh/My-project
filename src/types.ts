@@ -19,6 +19,8 @@ export interface ChartConfig {
   showGrid: boolean;
   barWidth: number;
   gap: number;
+  yAxisMax?: number;
+  yAxisStep?: number;
 }
 
 export interface LevelConfig {

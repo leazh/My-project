@@ -49,20 +49,30 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
       .paddingInner(0.05)
       .paddingOuter(0.05);
 
-    const yMax = d3.max(data, (d: DataPoint) => d.mean + d.sd) || 10;
+    const dataMax = d3.max(data, (d: DataPoint) => d.mean + d.sd) || 10;
+    const yMax = config.yAxisMax && config.yAxisMax > 0 ? config.yAxisMax : dataMax * 1.1;
+    
     const y = d3.scaleLinear()
-      .domain([0, yMax * 1.1])
-      .nice()
+      .domain([0, yMax])
       .range([height, 0]);
+
+    if (!config.yAxisMax) {
+      y.nice();
+    }
+
+    let tickValues: number[] | undefined = undefined;
+    if (config.yAxisStep && config.yAxisStep > 0) {
+      tickValues = d3.range(0, yMax + config.yAxisStep / 2, config.yAxisStep);
+    }
 
     // Grid Lines
     if (config.showGrid) {
+      const gridAxis = d3.axisLeft(y).tickSize(-width).tickFormat(() => '');
+      if (tickValues) gridAxis.tickValues(tickValues);
+
       g.append('g')
         .attr('class', 'grid')
-        .call(d3.axisLeft(y)
-          .tickSize(-width)
-          .tickFormat(() => '')
-        )
+        .call(gridAxis)
         .selectAll('line')
         .attr('stroke', '#e5e7eb')
         .attr('stroke-dasharray', '4,4')
@@ -114,8 +124,15 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
         .text((d: string) => d);
     });
 
-    g.append('g')
-      .call(d3.axisLeft(y));
+    const yAxis = d3.axisLeft(y);
+    if (tickValues) yAxis.tickValues(tickValues);
+
+    const yAxisGroup = g.append('g')
+      .call(yAxis);
+      
+    // Move tick marks to the right of the axis line
+    yAxisGroup.selectAll('.tick line')
+      .attr('x2', 6);
 
     // Bars
     const bars = g.selectAll<SVGGElement, DataPoint>('.bar-group')
@@ -135,8 +152,7 @@ export const Chart: React.FC<ChartProps> = ({ data, config }) => {
       .attr('height', (d: DataPoint) => height - y(d.mean))
       .attr('fill', (d: DataPoint) => d.color)
       .attr('stroke', (d: DataPoint) => d.outlineColor || 'none')
-      .attr('stroke-width', (d: DataPoint) => d.outlineWidth || 0)
-      .attr('rx', 2);
+      .attr('stroke-width', (d: DataPoint) => d.outlineWidth || 0);
 
     // Error Bars
     if (config.showErrorBars) {
