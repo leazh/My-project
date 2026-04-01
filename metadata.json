@@ -1,0 +1,5 @@
+{
+  "name": "条形图生成器",
+  "description": "A professional tool to generate bar charts with error bars from mean and standard deviation, supporting up to 3 levels of hierarchical grouping.",
+  "requestFramePermissions": []
+}
