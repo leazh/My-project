@@ -24,15 +24,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ data, setData, config, setConf
   const syncDataWithLevels = useCallback(() => {
     const newData: DataPoint[] = [];
     const defaultColors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'];
+    const usedIds = new Set<string>();
 
     levelConfig.level1Labels.forEach((l1) => {
       levelConfig.level2Labels.forEach((l2) => {
         levelConfig.level3Labels.forEach((l3, idx) => {
           // Try to find existing data to preserve mean/sd/color
-          const existing = data.find(p => p.level1 === l1 && p.level2 === l2 && p.level3 === l3);
+          const existing = data.find(p => p.level1 === l1 && p.level2 === l2 && p.level3 === l3 && !usedIds.has(p.id));
+          const newId = existing?.id || crypto.randomUUID();
+          usedIds.add(newId);
           
           newData.push({
-            id: existing?.id || crypto.randomUUID(),
+            id: newId,
             level1: l1,
             level2: l2,
             level3: l3,
